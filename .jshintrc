@@ -1,0 +1,17 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "noempty": true,
+  "trailing": true,
+  "undef": true,
+  "unused": true,
+  "laxbreak": true,
+  "globals": {
+    "console": false,
+    "exports": false,
+    "process": false,
+    "require": false,
+    "module": false,
+    "__dirname": false
+  }
+}

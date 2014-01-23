@@ -1,0 +1,36 @@
+{
+  "name": "getlet",
+  "version": "0.0.0",
+  "description": "HTTP(s) get request with redirect, compress and streaming",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "make check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code42day/getlet.git"
+  },
+  "keywords": [
+    "HTTP",
+    "HTTPS",
+    "request",
+    "GET",
+    "redirect",
+    "stream"
+  ],
+  "author": "Damian Krzeminski <pirxpilot@code42day.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/code42day/getlet/issues"
+  },
+  "homepage": "https://github.com/code42day/getlet",
+  "dependencies": {
+    "debug": "~0.7"
+  },
+  "devDependencies": {
+    "jshint": "~2"
+  }
+}
