@@ -31,8 +31,17 @@ function getlet(u) {
     return self;
   }
 
+  function header(name, value) {
+    options.headers[name] = value;
+    return header;
+  }
+
   function userAgent(ua) {
-    options.headers['User-Agent'] = ua;
+    return header('User-Agent', ua);
+  }
+
+  function auth(username, password) {
+    options.auth = [username, password].join(':');
     return self;
   }
 
@@ -43,7 +52,6 @@ function getlet(u) {
   function isError(res) {
     return Math.floor(res.statusCode / 100) !== 2;
   }
-
 
   function isCompressed(res) {
     return (/^(deflate|gzip)$/).test(res.headers['content-encoding']);
@@ -111,6 +119,8 @@ function getlet(u) {
     secure: secure,
     pipe: pipe,
     url: url,
+    header: header,
+    auth: auth,
     userAgent: userAgent
   };
 
