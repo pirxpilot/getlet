@@ -2,6 +2,7 @@ var http = require('http');
 var https = require('https');
 var parse = require('url').parse;
 var zlib = require('zlib');
+var clone = require('clone');
 var debug = require('debug')('getlet');
 
 module.exports = getlet;
@@ -33,7 +34,7 @@ function getlet(u) {
 
   function header(name, value) {
     options.headers[name] = value;
-    return header;
+    return self;
   }
 
   function userAgent(ua) {
@@ -76,24 +77,33 @@ function getlet(u) {
     stream.end();
   }
 
+  function isLoop() {
+    var location = [options.protocol, options.host, options.path];
+    if (redirects[location]) {
+      return true;
+    }
+    redirects[location] = true;
+  }
+
   function handleRedirect(res, stream) {
     var location = res.headers.location;
-    if (redirects[location]) {
-      return propagateError('Redirect loop detected: ' + location, stream);
-    }
     debug('Redirecting to %s', location);
     url(location);
+    if (isLoop()) {
+      return propagateError('Redirect loop detected: ' + location, stream);
+    }
     pipe(stream);
   }
 
   function pipe(stream) {
-    var req = transport.request(options);
+    var req = transport.request(clone(options));
+    isLoop(options);
     req.on('response', function(res) {
       if (isRedirect(res)) {
         return handleRedirect(res, stream);
       }
       if (isError(res)) {
-        return propagateError('HTTP Error:' + res.statusCode, stream);
+        return propagateError('HTTP Error: ' + res.statusCode, stream);
       }
       if (isCompressed(res)) {
         debug('Decompress response');

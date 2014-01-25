@@ -1,6 +1,9 @@
-check: lint
+check: lint test
 
 lint:
 	./node_modules/.bin/jshint *.js
 
-.PHONY: lint check
+test:
+	./node_modules/.bin/mocha --require should
+
+.PHONY: lint test check

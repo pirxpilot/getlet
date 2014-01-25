@@ -28,9 +28,14 @@
   },
   "homepage": "https://github.com/code42day/getlet",
   "dependencies": {
-    "debug": "~0.7"
+    "debug": "~0.7",
+    "clone": "~0.1"
   },
   "devDependencies": {
-    "jshint": "~2"
+    "jshint": "~2",
+    "should": "~3",
+    "nock": "~0",
+    "mocha": "~1",
+    "concat-stream": "~1"
   }
 }
