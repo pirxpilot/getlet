@@ -48,7 +48,7 @@ set `User-Agent` header
 
 set header `name` to `value`
 
-### auth(username, password)
+### `auth(username, password)`
 
 sets basic authentication `Authorization` header
 
