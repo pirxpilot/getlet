@@ -1,3 +1,7 @@
+[![Build Status](https://secure.travis-ci.org/code42day/getlet.png)](http://travis-ci.org/code42day/getlet)
+[![Dependency Status](https://gemnasium.com/code42day/getlet.png)](https://gemnasium.com/code42day/getlet)
+[![NPM version](https://badge.fury.io/js/getlet.png)](http://badge.fury.io/js/getlet)
+
 #getlet
 
 HTTP(s) get request with redirect, compress and streaming
