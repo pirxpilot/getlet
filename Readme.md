@@ -1,6 +1,6 @@
-[![Build Status](https://secure.travis-ci.org/code42day/getlet.png)](http://travis-ci.org/code42day/getlet)
-[![Dependency Status](https://gemnasium.com/code42day/getlet.png)](https://gemnasium.com/code42day/getlet)
-[![NPM version](https://badge.fury.io/js/getlet.png)](http://badge.fury.io/js/getlet)
+[![Build Status](https://img.shields.io/travis/code42day/getlet.svg)](http://travis-ci.org/code42day/getlet)
+[![Dependency Status](https://img.shields.io/gemnasium/code42day/getlet.svg)](https://gemnasium.com/code42day/getlet)
+[![NPM version](https://img.shields.io/npm/v/getlet.svg)](http://badge.fury.io/js/getlet)
 
 #getlet
 
