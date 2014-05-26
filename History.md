@@ -1,4 +1,11 @@
 
+1.0.0 / 2014-05-26
+==================
+
+ * fix nock version to work around the issue
+ * fix minor lint issues
+ * add travis config
+
 0.1.0 / 2014-01-25
 ==================
 
