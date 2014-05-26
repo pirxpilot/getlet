@@ -1,7 +1,8 @@
 var getlet = require('..');
 var nock = require('nock');
 var concat = require('concat-stream');
-var zlib = require('zlib');
+
+/* global describe, it */
 
 describe('getlet', function() {
 
@@ -107,7 +108,7 @@ describe('getlet', function() {
     .on('error', function(err) {
       err.should.eql('Redirect loop detected: /more/data');
       done();
-    })
+    });
   });
 
   it('should propagate errors', function(done) {
@@ -120,7 +121,7 @@ describe('getlet', function() {
     .on('error', function(err) {
       err.should.eql('HTTP Error: 404');
       done();
-    })
+    });
   });
 
   it('should unzip responses', function(done) {

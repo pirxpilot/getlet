@@ -1,9 +1,7 @@
 check: lint test
+.PHONY: check
 
-lint:
-	./node_modules/.bin/jshint *.js
+LINT_SRC=index.js test
 
-test:
-	./node_modules/.bin/mocha --require should
-
-.PHONY: lint test check
+include ./node_modules/make-test/index.mk
+include ./node_modules/make-jshint/index.mk
