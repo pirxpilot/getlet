@@ -1,5 +1,5 @@
-[![Build Status](https://img.shields.io/travis/code42day/getlet.svg)](http://travis-ci.org/code42day/getlet)
-[![Dependency Status](https://img.shields.io/gemnasium/code42day/getlet.svg)](https://gemnasium.com/code42day/getlet)
+[![Build Status](https://img.shields.io/travis/pirxpilot/getlet.svg)](http://travis-ci.org/pirxpilot/getlet)
+[![Dependency Status](https://img.shields.io/gemnasium/pirxpilot/getlet.svg)](https://gemnasium.com/pirxpilot/getlet)
 [![NPM version](https://img.shields.io/npm/v/getlet.svg)](http://badge.fury.io/js/getlet)
 
 #getlet
@@ -23,7 +23,7 @@ but it won't do any other processing. It won't buffer the responses in any way.
   // configure URL from host and part
   getlet()
     .host('raw2.github.com')
-    .path('/code42day/liftie/master/.jshintrc')
+    .path('/pirxpilot/liftie/master/.jshintrc')
     .secure(true)
     .pipe(stream)
     .on('error', errorHandler); // errors are passed downstream

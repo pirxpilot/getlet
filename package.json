@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/code42day/getlet.git"
+    "url": "https://github.com/pirxpilot/getlet.git"
   },
   "keywords": [
     "HTTP",
@@ -21,12 +21,9 @@
     "redirect",
     "stream"
   ],
-  "author": "Damian Krzeminski <pirxpilot@code42day.com>",
+  "author": "Damian Krzeminski <pirxpilot@furkot.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/code42day/getlet/issues"
-  },
-  "homepage": "https://github.com/code42day/getlet",
+  "homepage": "https://github.com/pirxpilot/getlet",
   "dependencies": {
     "debug": "~0",
     "clone": "~0"
