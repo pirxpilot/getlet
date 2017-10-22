@@ -1,4 +1,11 @@
 
+1.0.2 / 2017-10-21
+==================
+
+ * remove clone dependency
+ * relax debug dependency
+ * update dev dependencies
+
 1.0.1 / 2017-02-23
 ==================
 
