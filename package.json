@@ -26,7 +26,7 @@
   "homepage": "https://github.com/pirxpilot/getlet",
   "dependencies": {
     "clone": "~0",
-    "debug": "~0"
+    "debug": "*"
   },
   "devDependencies": {
     "concat-stream": "~1",
