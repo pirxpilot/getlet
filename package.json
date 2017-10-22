@@ -25,15 +25,15 @@
   "license": "MIT",
   "homepage": "https://github.com/pirxpilot/getlet",
   "dependencies": {
-    "debug": "~0",
-    "clone": "~0"
+    "debug": "*"
   },
   "devDependencies": {
     "concat-stream": "~1",
-    "make-jshint": "~1",
+    "jshint": "~2",
+    "make-jshint": "~2",
     "make-test": "~0",
-    "mocha": "~1",
-    "nock": "~0.30",
-    "should": "~3"
+    "mocha": "~4",
+    "nock": "~9",
+    "should": "~13"
   }
 }

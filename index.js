@@ -2,7 +2,6 @@ var http = require('http');
 var https = require('https');
 var parse = require('url').parse;
 var zlib = require('zlib');
-var clone = require('clone');
 var debug = require('debug')('getlet');
 
 module.exports = getlet;
@@ -96,7 +95,7 @@ function getlet(u) {
   }
 
   function pipe(stream) {
-    var req = transport.request(clone(options));
+    var req = transport.request(Object.assign({}, options));
     isLoop(options);
     req.on('response', function(res) {
       if (isRedirect(res)) {
