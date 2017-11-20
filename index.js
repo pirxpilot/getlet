@@ -41,7 +41,9 @@ function getlet(u) {
   }
 
   function auth(username, password) {
-    options.auth = [username, password].join(':');
+    options.auth = typeof password === 'string'
+      ? [username, password].join(':')
+      : username;
     return self;
   }
 
@@ -67,6 +69,9 @@ function getlet(u) {
     }
     if (parsed.protocol) {
       secure(parsed.protocol === 'https:');
+    }
+    if (parsed.auth) {
+      auth(parsed.auth);
     }
   }
 
