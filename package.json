@@ -1,6 +1,6 @@
 {
   "name": "getlet",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "HTTP(s) get request with redirect, compress and streaming",
   "main": "index.js",
   "directories": {
