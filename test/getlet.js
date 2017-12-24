@@ -1,6 +1,6 @@
-var getlet = require('..');
-var nock = require('nock');
-var concat = require('concat-stream');
+const getlet = require('..');
+const nock = require('nock');
+const concat = require('concat-stream');
 
 /* global describe, it */
 
