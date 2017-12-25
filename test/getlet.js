@@ -82,6 +82,26 @@ describe('getlet', function() {
     }));
   });
 
+  it('should support multiple headers', function(done) {
+    nock('http://example.com')
+      .matchHeader('authorization', '1234')
+      .matchHeader('x-custom', 'custom value')
+      .get('/simple/data')
+      .reply(200, 'abc');
+
+    getlet('http://example.com/simple/data')
+    .set({
+      authorization: '1234',
+      'x-custom': 'custom value'
+    })
+    .pipe(concat({
+      encoding: 'string'
+    }, function(data) {
+      data.should.eql('abc');
+      done();
+    }));
+  });
+
   it('should follow redirects', function(done) {
     nock('http://example.com')
       .get('/simple/data')

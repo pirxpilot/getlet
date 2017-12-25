@@ -8,15 +8,16 @@ module.exports = getlet;
 
 function getlet(u) {
   let self = {
-    host,
-    path,
-    secure,
-    pipe,
-    method,
-    send,
-    url,
-    header,
     auth,
+    header,
+    host,
+    method,
+    path,
+    pipe,
+    secure,
+    send,
+    set: header,
+    url,
     userAgent
   };
 
@@ -48,7 +49,12 @@ function getlet(u) {
   }
 
   function header(name, value) {
-    options.headers[name] = value;
+    if (value !== undefined) {
+      options.headers[name] = value;
+    }
+    else {
+      Object.entries(name).forEach(([n, v]) => options.headers[n] = v);
+    }
     return self;
   }
 
