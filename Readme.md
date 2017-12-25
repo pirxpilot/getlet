@@ -4,9 +4,9 @@
 
 #getlet
 
-HTTP(s) get request with redirect, compress and streaming
+HTTP(s) request with redirect, compress and streaming
 
-To be used if you only need HTTP GET, and if you'd rather have your response processed downstream.
+To be used if you only need bare bones HTTP request and if you'd rather have your response processed downstream.
 
 `getlet` will send the request, handle the redirects and pipe the response.
 If you need anything more than this check [superagent] or [request].
@@ -27,6 +27,13 @@ but it won't do any other processing. It won't buffer the responses in any way.
     .secure(true)
     .pipe(stream)
     .on('error', errorHandler); // errors are passed downstream
+
+  // post some data
+  getlet('https//example.com/form')
+    .method('POST')
+    .send(formData)
+    .pipe(stream);
+
 ```
 
 ## API
@@ -50,11 +57,20 @@ set `User-Agent` header
 
 ### `header(name, value)`
 
-set header `name` to `value`
+set header `name` to `value`, also accepts an object treated as `name` ->` value`
 
 ### `auth(username, password)`
 
 sets basic authentication `Authorization` header
+
+### `send(data)`
+
+sends `data` with the request
+
+### `method(method)`
+
+uses HTTP `method` (`POST`, `PUT` etc) - `GET` is used if `method` is not called
+
 
 [request]: https://github.com/mikeal/request
 [superagent]: http://visionmedia.github.io/superagent/
