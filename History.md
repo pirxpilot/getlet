@@ -1,4 +1,10 @@
 
+1.1.0 / 2017-12-25
+==================
+
+ * add support for multiple headers in header
+ * add `method` and `send` functions
+
 1.0.3 / 2017-11-19
 ==================
 
