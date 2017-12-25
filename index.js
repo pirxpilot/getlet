@@ -12,6 +12,8 @@ function getlet(u) {
     path,
     secure,
     pipe,
+    method,
+    send,
     url,
     header,
     auth,
@@ -23,9 +25,15 @@ function getlet(u) {
   };
   let redirects = Object.create(null);
   let transport = http;
+  let data;
 
   function host(h) {
     options.host = h;
+    return self;
+  }
+
+  function method(m) {
+    options.method = m;
     return self;
   }
 
@@ -41,6 +49,11 @@ function getlet(u) {
 
   function header(name, value) {
     options.headers[name] = value;
+    return self;
+  }
+
+  function send(d) {
+    data = d;
     return self;
   }
 
@@ -109,6 +122,9 @@ function getlet(u) {
 
   function pipe(stream) {
     let req = transport.request(Object.assign({}, options));
+    if (data) {
+      req.write(data);
+    }
     isLoop(options);
     req.on('response', function(res) {
       if (isRedirect(res)) {

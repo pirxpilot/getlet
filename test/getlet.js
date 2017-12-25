@@ -20,6 +20,20 @@ describe('getlet', function() {
     }));
   });
 
+  it('should post data', function(done) {
+    nock('http://example.com')
+      .post('/simple/data', '123')
+      .reply(200, 'cde');
+
+    getlet('http://example.com/simple/data')
+      .method('POST')
+      .send('123')
+      .pipe(concat({ encoding: 'string' }, function(data) {
+        data.should.eql('cde');
+        done();
+      }));
+  });
+
   it('should support host and path simple data', function(done) {
     nock('http://example.com')
       .get('/simple/data')
@@ -139,5 +153,4 @@ describe('getlet', function() {
       done();
     }));
   });
-
 });
