@@ -1,23 +1,40 @@
-var http = require('http');
-var https = require('https');
-var parse = require('url').parse;
-var zlib = require('zlib');
-var debug = require('debug')('getlet');
+const http = require('http');
+const https = require('https');
+const parse = require('url').parse;
+const zlib = require('zlib');
+const debug = require('debug')('getlet');
 
 module.exports = getlet;
 
 function getlet(u) {
-  var self,
-    options = {
-      headers: {
-        'Accept-Encoding': 'gzip, deflate',
-      }
-    },
-    redirects = Object.create(null),
-    transport = http;
+  let self = {
+    auth,
+    header,
+    host,
+    method,
+    path,
+    pipe,
+    secure,
+    send,
+    set: header,
+    url,
+    userAgent
+  };
+
+  let options = {
+    headers: { 'Accept-Encoding': 'gzip, deflate' }
+  };
+  let redirects = Object.create(null);
+  let transport = http;
+  let data;
 
   function host(h) {
     options.host = h;
+    return self;
+  }
+
+  function method(m) {
+    options.method = m;
     return self;
   }
 
@@ -32,7 +49,17 @@ function getlet(u) {
   }
 
   function header(name, value) {
-    options.headers[name] = value;
+    if (value !== undefined) {
+      options.headers[name] = value;
+    }
+    else {
+      Object.entries(name).forEach(([n, v]) => options.headers[n] = v);
+    }
+    return self;
+  }
+
+  function send(d) {
+    data = d;
     return self;
   }
 
@@ -42,7 +69,7 @@ function getlet(u) {
 
   function auth(username, password) {
     options.auth = typeof password === 'string'
-      ? [username, password].join(':')
+      ? `${username}:${password}`
       : username;
     return self;
   }
@@ -60,7 +87,7 @@ function getlet(u) {
   }
 
   function url(u) {
-    var parsed = parse(u, false, true);
+    let parsed = parse(u, false, true);
     if (parsed.host) {
       host(parsed.host);
     }
@@ -82,7 +109,7 @@ function getlet(u) {
   }
 
   function isLoop() {
-    var location = [options.protocol, options.host, options.path];
+    let location = [options.protocol, options.host, options.path];
     if (redirects[location]) {
       return true;
     }
@@ -90,7 +117,7 @@ function getlet(u) {
   }
 
   function handleRedirect(res, stream) {
-    var location = res.headers.location;
+    let location = res.headers.location;
     debug('Redirecting to %s', location);
     url(location);
     if (isLoop()) {
@@ -100,7 +127,10 @@ function getlet(u) {
   }
 
   function pipe(stream) {
-    var req = transport.request(Object.assign({}, options));
+    let req = transport.request(Object.assign({}, options));
+    if (data) {
+      req.write(data);
+    }
     isLoop(options);
     req.on('response', function(res) {
       if (isRedirect(res)) {
@@ -126,17 +156,6 @@ function getlet(u) {
   if (u) {
     url(u);
   }
-
-  self = {
-    host: host,
-    path: path,
-    secure: secure,
-    pipe: pipe,
-    url: url,
-    header: header,
-    auth: auth,
-    userAgent: userAgent
-  };
 
   return self;
 }

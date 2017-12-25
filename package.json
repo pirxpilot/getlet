@@ -35,5 +35,8 @@
     "mocha": "~4",
     "nock": "~9",
     "should": "~13"
-  }
+  },
+  "files": [
+    "index.js"
+  ]
 }
