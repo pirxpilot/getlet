@@ -20,6 +20,20 @@ describe('getlet', function() {
     }));
   });
 
+  it('should emit response event', function(done) {
+    nock('http://example.com')
+      .matchHeader('accept-encoding', 'gzip, deflate')
+      .get('/simple/data')
+      .reply(200, 'abc');
+
+    getlet('http://example.com/simple/data')
+      .pipe(concat())
+      .on('response', function(res) {
+        res.statusCode.should.eql(200);
+        done();
+      });
+  });
+
   it('should post data', function(done) {
     nock('http://example.com')
       .post('/simple/data', '123')

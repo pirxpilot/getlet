@@ -7,7 +7,7 @@ const debug = require('debug')('getlet');
 module.exports = getlet;
 
 function getlet(u) {
-  let self = {
+  const self = {
     auth,
     header,
     host,
@@ -139,6 +139,7 @@ function getlet(u) {
       if (isError(res)) {
         return propagateError('HTTP Error: ' + res.statusCode, stream);
       }
+      self.emit('response', res);
       if (isCompressed(res)) {
         debug('Decompress response');
         res = res.pipe(zlib.createGunzip());
