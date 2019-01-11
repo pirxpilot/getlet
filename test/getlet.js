@@ -1,6 +1,7 @@
 const getlet = require('..');
 const nock = require('nock');
 const concat = require('concat-stream');
+const { Transform } = require('stream');
 
 /* global describe, it */
 
@@ -187,4 +188,35 @@ describe('getlet', function() {
       done();
     }));
   });
+
+  describe('abort', function() {
+    it('should close stream', function(done) {
+      nock('http://example.com')
+        .get('/simple/data')
+        .reply(200, 'abcabcabcabc');
+
+      let g = getlet('http://example.com/simple/data');
+
+      let truncate = new Transform({
+        transform(chunk, encoding, next) {
+          // push 3 characters only and then abort
+          this.push(chunk.slice(0, 3));
+          next();
+          g.abort();
+        }
+      });
+
+      g
+      .pipe(truncate)
+      .on('error', function(e) {
+        // ignore abort error
+        e.should.have.property('code', 'ECONNRESET');
+      })
+      .pipe(concat({ encoding: 'string'}, function(data) {
+        data.should.eql('abc');
+        done();
+      }));
+    });
+  });
+
 });

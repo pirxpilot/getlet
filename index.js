@@ -8,6 +8,7 @@ module.exports = getlet;
 
 function getlet(u) {
   const self = {
+    abort,
     auth,
     header,
     host,
@@ -27,6 +28,8 @@ function getlet(u) {
   let redirects = Object.create(null);
   let transport = http;
   let data;
+  let aborted;
+  let currentRequest;
 
   function host(h) {
     options.host = h;
@@ -126,8 +129,22 @@ function getlet(u) {
     pipe(stream);
   }
 
+  function abort() {
+    if (aborted) {
+      return;
+    }
+    aborted = true;
+    if (currentRequest) {
+      currentRequest.abort();
+    }
+  }
+
   function pipe(stream) {
+    if (aborted) {
+      return stream;
+    }
     let req = transport.request(Object.assign({}, options));
+    currentRequest = req;
     if (data) {
       req.write(data);
     }
