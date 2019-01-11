@@ -32,7 +32,7 @@
     "jshint": "~2",
     "make-jshint": "~2",
     "make-test": "~0",
-    "mocha": "~4",
+    "mocha": "~5",
     "nock": "~9",
     "should": "~13"
   },
