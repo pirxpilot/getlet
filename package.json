@@ -33,7 +33,7 @@
     "make-jshint": "~2",
     "make-test": "~0",
     "mocha": "~5",
-    "nock": "~9",
+    "nock": "~10",
     "should": "~13"
   },
   "files": [
