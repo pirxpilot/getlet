@@ -1,8 +1,10 @@
-[![Build Status](https://img.shields.io/travis/pirxpilot/getlet.svg)](http://travis-ci.org/pirxpilot/getlet)
-[![Dependency Status](https://img.shields.io/gemnasium/pirxpilot/getlet.svg)](https://gemnasium.com/pirxpilot/getlet)
-[![NPM version](https://img.shields.io/npm/v/getlet.svg)](http://badge.fury.io/js/getlet)
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Dependency Status][deps-image]][deps-url]
+[![Development Dependency Status][dev-deps-image]][dev-deps-url]
 
-#getlet
+
+# getlet
 
 HTTP(s) request with redirect, compress and streaming
 
@@ -25,8 +27,8 @@ but it won't do any other processing. It won't buffer the responses in any way.
     .host('raw2.github.com')
     .path('/pirxpilot/liftie/master/.jshintrc')
     .secure(true)
-    .pipe(stream)
-    .on('error', errorHandler); // errors are passed downstream
+    .on('error', errorHandler)
+    .pipe(stream);
 
   // post some data
   getlet('https//example.com/form')
@@ -74,3 +76,15 @@ uses HTTP `method` (`POST`, `PUT` etc) - `GET` is used if `method` is not called
 
 [request]: https://github.com/mikeal/request
 [superagent]: http://visionmedia.github.io/superagent/
+
+[npm-image]: https://img.shields.io/npm/v/getlet.svg
+[npm-url]: https://npmjs.org/package/getlet
+
+[travis-image]: https://img.shields.io/travis/pirxpilot/getlet.svg
+[travis-url]: https://travis-ci.org/pirxpilot/getlet
+
+[deps-image]: https://img.shields.io/david/pirxpilot/getlet.svg
+[deps-url]: https://david-dm.org/pirxpilot/getlet
+
+[dev-deps-image]: https://img.shields.io/david/dev/pirxpilot/getlet.svg
+[dev-deps-url]: https://david-dm.org/pirxpilot/getlet?type=dev

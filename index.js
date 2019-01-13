@@ -1,5 +1,6 @@
 const http = require('http');
 const https = require('https');
+const { PassThrough } = require('stream');
 const parse = require('url').parse;
 const zlib = require('zlib');
 const debug = require('debug')('getlet');
@@ -7,19 +8,19 @@ const debug = require('debug')('getlet');
 module.exports = getlet;
 
 function getlet(u) {
-  let self = {
+  const self = Object.assign(new PassThrough(), {
+    abort,
     auth,
     header,
     host,
     method,
     path,
-    pipe,
     secure,
     send,
     set: header,
     url,
     userAgent
-  };
+  });
 
   let options = {
     headers: { 'Accept-Encoding': 'gzip, deflate' }
@@ -27,6 +28,8 @@ function getlet(u) {
   let redirects = Object.create(null);
   let transport = http;
   let data;
+  let aborted;
+  let currentRequest;
 
   function host(h) {
     options.host = h;
@@ -102,10 +105,10 @@ function getlet(u) {
     }
   }
 
-  function propagateError(err, stream) {
+  function propagateError(err) {
     debug('Error detected: %s', err);
-    stream.emit('error', err);
-    stream.end();
+    self.emit('error', err);
+    self.end();
   }
 
   function isLoop() {
@@ -116,46 +119,62 @@ function getlet(u) {
     redirects[location] = true;
   }
 
-  function handleRedirect(res, stream) {
+  function handleRedirect(res) {
     let location = res.headers.location;
     debug('Redirecting to %s', location);
     url(location);
     if (isLoop()) {
-      return propagateError('Redirect loop detected: ' + location, stream);
+      return propagateError('Redirect loop detected: ' + location);
     }
-    pipe(stream);
+    init();
   }
 
-  function pipe(stream) {
+  function abort() {
+    if (aborted) {
+      return self;
+    }
+    aborted = true;
+    if (currentRequest) {
+      currentRequest.abort();
+    }
+    return self;
+  }
+
+  function init() {
+    if (aborted) {
+      self.end();
+      return self;
+    }
     let req = transport.request(Object.assign({}, options));
+    currentRequest = req;
     if (data) {
       req.write(data);
     }
     isLoop(options);
     req.on('response', function(res) {
       if (isRedirect(res)) {
-        return handleRedirect(res, stream);
+        return handleRedirect(res);
       }
       if (isError(res)) {
-        return propagateError('HTTP Error: ' + res.statusCode, stream);
+        return propagateError('HTTP Error: ' + res.statusCode);
       }
+      self.emit('response', res);
       if (isCompressed(res)) {
         debug('Decompress response');
         res = res.pipe(zlib.createGunzip());
       }
-      res.pipe(stream);
+      res.pipe(self);
     });
-    req.on('error', function(err) {
-      propagateError(err, stream);
-    });
+    req.on('error', propagateError);
     debug('GET %s on %s', options.path, options.host);
     req.end();
-    return stream;
   }
 
   if (u) {
     url(u);
   }
+
+  process.nextTick(init);
 
   return self;
 }

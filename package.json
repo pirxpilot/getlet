@@ -28,12 +28,12 @@
     "debug": "*"
   },
   "devDependencies": {
-    "concat-stream": "~1",
+    "concat-stream": "~2",
     "jshint": "~2",
     "make-jshint": "~2",
     "make-test": "~0",
-    "mocha": "~4",
-    "nock": "~9",
+    "mocha": "~5",
+    "nock": "~10",
     "should": "~13"
   },
   "files": [
