@@ -28,11 +28,11 @@ describe('getlet', function() {
       .reply(200, 'abc');
 
     getlet('http://example.com/simple/data')
-      .pipe(concat())
       .on('response', function(res) {
         res.statusCode.should.eql(200);
         done();
-      });
+      })
+      .pipe(concat());
   });
 
   it('should post data', function(done) {
@@ -153,11 +153,11 @@ describe('getlet', function() {
       });
 
     getlet('http://example.com/simple/data')
-    .pipe(concat())
     .on('error', function(err) {
       err.should.eql('Redirect loop detected: /more/data');
       done();
-    });
+    })
+    .pipe(concat());
   });
 
   it('should propagate errors', function(done) {
@@ -166,11 +166,11 @@ describe('getlet', function() {
       .reply(404, 'No such file');
 
     getlet('http://example.com/simple/data')
-    .pipe(concat())
     .on('error', function(err) {
       err.should.eql('HTTP Error: 404');
       done();
-    });
+    })
+    .pipe(concat());
   });
 
   it('should unzip responses', function(done) {
@@ -207,16 +207,33 @@ describe('getlet', function() {
       });
 
       g
-      .pipe(truncate)
       .on('error', function(e) {
         // ignore abort error
         e.should.have.property('code', 'ECONNRESET');
       })
+      .pipe(truncate)
       .pipe(concat({ encoding: 'string'}, function(data) {
         data.should.eql('abc');
         done();
       }));
     });
+
+    it('should not stream if already aborted', function(done) {
+      nock('http://example.com')
+        .get('/simple/data')
+        .reply(200, 'abcabcabcabc');
+
+      let g = getlet('http://example.com/simple/data');
+      g.abort();
+
+      g
+      .pipe(concat({ encoding: 'string'}, function(data) {
+        data.should.eql('');
+        done();
+      }));
+    });
+
+
   });
 
 });

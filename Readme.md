@@ -2,7 +2,7 @@
 [![Dependency Status](https://img.shields.io/gemnasium/pirxpilot/getlet.svg)](https://gemnasium.com/pirxpilot/getlet)
 [![NPM version](https://img.shields.io/npm/v/getlet.svg)](http://badge.fury.io/js/getlet)
 
-#getlet
+# getlet
 
 HTTP(s) request with redirect, compress and streaming
 
@@ -25,8 +25,8 @@ but it won't do any other processing. It won't buffer the responses in any way.
     .host('raw2.github.com')
     .path('/pirxpilot/liftie/master/.jshintrc')
     .secure(true)
-    .pipe(stream)
-    .on('error', errorHandler); // errors are passed downstream
+    .on('error', errorHandler)
+    .pipe(stream);
 
   // post some data
   getlet('https//example.com/form')
