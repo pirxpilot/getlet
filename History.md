@@ -1,4 +1,11 @@
 
+2.0.0 / 2019-01-12
+==================
+
+ * make getlet a real stream
+ * add abort method
+ * add support for response event
+
 1.1.0 / 2017-12-25
 ==================
 
