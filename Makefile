@@ -3,5 +3,9 @@ check: lint test
 
 LINT_SRC=index.js test
 
-include ./node_modules/make-test/index.mk
 include ./node_modules/make-jshint/index.mk
+
+test:
+	./node_modules/.bin/tape test/*.js | ./node_modules/.bin/tap-dot
+
+.PHONY: test
