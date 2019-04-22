@@ -1,4 +1,11 @@
 
+2.1.0 / 2019-04-21
+==================
+
+ * add support for brotli content-encoding (node >= 11.7.0)
+ * fix handling deflated responses
+ * fix propagating zlib module errors
+
 2.0.0 / 2019-01-12
 ==================
 
