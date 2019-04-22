@@ -1,11 +1,22 @@
 const http = require('http');
 const https = require('https');
 const { PassThrough } = require('stream');
-const parse = require('url').parse;
-const zlib = require('zlib');
+const { parse } = require('url');
+const { createGunzip, createInflate } = require('zlib');
 const debug = require('debug')('getlet');
 
 module.exports = getlet;
+
+
+function getInflatorStream({ headers }) {
+  switch (headers['content-encoding']) {
+    case 'gzip':
+    case 'x-gzip':
+      return createGunzip();
+    case 'deflate':
+      return createInflate();
+  }
+}
 
 function getlet(u) {
   const self = Object.assign(new PassThrough(), {
@@ -85,10 +96,6 @@ function getlet(u) {
     return Math.floor(res.statusCode / 100) !== 2;
   }
 
-  function isCompressed(res) {
-    return (/^(deflate|gzip)$/).test(res.headers['content-encoding']);
-  }
-
   function url(u) {
     let parsed = parse(u, false, true);
     if (parsed.host) {
@@ -159,10 +166,11 @@ function getlet(u) {
         return propagateError('HTTP Error: ' + res.statusCode);
       }
       self.emit('response', res);
-      if (isCompressed(res)) {
+      const inflator = getInflatorStream(res);
+      if (inflator) {
         debug('Decompress response');
-        const decompress = zlib.createGunzip().on('error', propagateError);
-        res = res.pipe(decompress);
+        inflator.on('error', propagateError);
+        res = res.pipe(inflator);
       }
       res.pipe(self);
     });

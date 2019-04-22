@@ -187,6 +187,22 @@ test('should unzip responses', function (t) {
   }));
 });
 
+test('should inflate responses', function (t) {
+  nock('http://example.com')
+    .get('/simple/data')
+    .replyWithFile(200, __dirname + '/fixtures/response.txt.flate', {
+      'content-encoding': 'deflate'
+    });
+
+  getlet('http://example.com/simple/data')
+  .pipe(concat({
+    encoding: 'string'
+  }, function(data) {
+    t.equal(data, 'This is compressed response!');
+    t.end();
+  }));
+});
+
 test('should ignore empty reponses with gzip encoding', function (t) {
   nock('http://example.com')
     .get('/simple/data')
