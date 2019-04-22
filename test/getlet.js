@@ -174,7 +174,7 @@ test('should propagate errors', function (t) {
 test('should unzip responses', function (t) {
   nock('http://example.com')
     .get('/simple/data')
-    .replyWithFile(200, __dirname + '/response.txt.gz', {
+    .replyWithFile(200, __dirname + '/fixtures/response.txt.gz', {
       'content-encoding': 'gzip'
     });
 
@@ -185,6 +185,21 @@ test('should unzip responses', function (t) {
     t.equal(data, 'This is compressed response!');
     t.end();
   }));
+});
+
+test('should ignore empty reponses with gzip encoding', function (t) {
+  nock('http://example.com')
+    .get('/simple/data')
+    .reply(200, '', {
+      'content-encoding': 'gzip'
+    });
+
+  getlet('http://example.com/simple/data')
+  .on('error', function(err) {
+    t.ok(err, 'should emit an error');
+    t.end();
+  })
+  .pipe(concat());
 });
 
 test('abort', function(t) {

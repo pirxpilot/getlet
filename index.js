@@ -161,7 +161,8 @@ function getlet(u) {
       self.emit('response', res);
       if (isCompressed(res)) {
         debug('Decompress response');
-        res = res.pipe(zlib.createGunzip());
+        const decompress = zlib.createGunzip().on('error', propagateError);
+        res = res.pipe(decompress);
       }
       res.pipe(self);
     });
