@@ -31,10 +31,9 @@
     "concat-stream": "~2",
     "jshint": "~2",
     "make-jshint": "~2",
-    "make-test": "~0",
-    "mocha": "~5",
     "nock": "~10",
-    "should": "~13"
+    "tap-dot": "^2.0.0",
+    "tape": "^4.10.1"
   },
   "files": [
     "index.js"

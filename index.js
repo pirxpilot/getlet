@@ -1,11 +1,31 @@
 const http = require('http');
 const https = require('https');
 const { PassThrough } = require('stream');
-const parse = require('url').parse;
-const zlib = require('zlib');
+const { parse } = require('url');
+const { createGunzip, createInflate, createBrotliDecompress } = require('zlib');
 const debug = require('debug')('getlet');
 
 module.exports = getlet;
+
+const BROTLI = typeof createBrotliDecompress === 'function';
+const ACCEPT_ENCODING = BROTLI ? 'br, gzip, deflate' : 'gzip, deflate';
+
+Object.assign(getlet, {
+  BROTLI,
+  ACCEPT_ENCODING
+});
+
+function getInflatorStream({ headers }) {
+  switch (headers['content-encoding']) {
+    case 'gzip':
+    case 'x-gzip':
+      return createGunzip();
+    case 'deflate':
+      return createInflate();
+    case 'br':
+      return BROTLI && createBrotliDecompress();
+  }
+}
 
 function getlet(u) {
   const self = Object.assign(new PassThrough(), {
@@ -23,7 +43,7 @@ function getlet(u) {
   });
 
   let options = {
-    headers: { 'Accept-Encoding': 'gzip, deflate' }
+    headers: { 'Accept-Encoding': ACCEPT_ENCODING }
   };
   let redirects = Object.create(null);
   let transport = http;
@@ -83,10 +103,6 @@ function getlet(u) {
 
   function isError(res) {
     return Math.floor(res.statusCode / 100) !== 2;
-  }
-
-  function isCompressed(res) {
-    return (/^(deflate|gzip)$/).test(res.headers['content-encoding']);
   }
 
   function url(u) {
@@ -159,9 +175,11 @@ function getlet(u) {
         return propagateError('HTTP Error: ' + res.statusCode);
       }
       self.emit('response', res);
-      if (isCompressed(res)) {
+      const inflator = getInflatorStream(res);
+      if (inflator) {
         debug('Decompress response');
-        res = res.pipe(zlib.createGunzip());
+        inflator.on('error', propagateError);
+        res = res.pipe(inflator);
       }
       res.pipe(self);
     });
