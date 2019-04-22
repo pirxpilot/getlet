@@ -7,7 +7,7 @@ const getlet = require('..');
 
 test('should request simple data', function (t) {
   nock('http://example.com')
-    .matchHeader('accept-encoding', 'gzip, deflate')
+    .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
     .get('/simple/data')
     .reply(200, 'abc');
 
@@ -21,7 +21,7 @@ test('should request simple data', function (t) {
 
 test('should emit response event', function (t) {
   nock('http://example.com')
-    .matchHeader('accept-encoding', 'gzip, deflate')
+    .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
     .get('/simple/data')
     .reply(200, 'abc');
 
@@ -192,6 +192,22 @@ test('should inflate responses', function (t) {
     .get('/simple/data')
     .replyWithFile(200, __dirname + '/fixtures/response.txt.flate', {
       'content-encoding': 'deflate'
+    });
+
+  getlet('http://example.com/simple/data')
+  .pipe(concat({
+    encoding: 'string'
+  }, function(data) {
+    t.equal(data, 'This is compressed response!');
+    t.end();
+  }));
+});
+
+test('should decompress brotli responses', { skip: !getlet.BROTLI }, function (t) {
+  nock('http://example.com')
+    .get('/simple/data')
+    .replyWithFile(200, __dirname + '/fixtures/response.txt.br', {
+      'content-encoding': 'br'
     });
 
   getlet('http://example.com/simple/data')

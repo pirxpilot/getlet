@@ -2,11 +2,18 @@ const http = require('http');
 const https = require('https');
 const { PassThrough } = require('stream');
 const { parse } = require('url');
-const { createGunzip, createInflate } = require('zlib');
+const { createGunzip, createInflate, createBrotliDecompress } = require('zlib');
 const debug = require('debug')('getlet');
 
 module.exports = getlet;
 
+const BROTLI = typeof createBrotliDecompress === 'function';
+const ACCEPT_ENCODING = BROTLI ? 'br, gzip, deflate' : 'gzip, deflate';
+
+Object.assign(getlet, {
+  BROTLI,
+  ACCEPT_ENCODING
+});
 
 function getInflatorStream({ headers }) {
   switch (headers['content-encoding']) {
@@ -15,6 +22,8 @@ function getInflatorStream({ headers }) {
       return createGunzip();
     case 'deflate':
       return createInflate();
+    case 'br':
+      return BROTLI && createBrotliDecompress();
   }
 }
 
@@ -34,7 +43,7 @@ function getlet(u) {
   });
 
   let options = {
-    headers: { 'Accept-Encoding': 'gzip, deflate' }
+    headers: { 'Accept-Encoding': ACCEPT_ENCODING }
   };
   let redirects = Object.create(null);
   let transport = http;
