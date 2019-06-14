@@ -1,4 +1,10 @@
 
+2.2.0 / 2019-06-14
+==================
+
+ * allow one redirect to the same location in case it expects cookies
+ * implement cookie handling
+
 2.1.0 / 2019-04-21
 ==================
 
