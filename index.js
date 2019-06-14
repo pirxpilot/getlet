@@ -129,10 +129,10 @@ function getlet(u) {
 
   function isLoop() {
     let location = [options.protocol, options.host, options.path];
-    if (redirects[location]) {
+    if (redirects[location] > 1) {
       return true;
     }
-    redirects[location] = true;
+    redirects[location] = (redirects[location] || 0) + 1;
   }
 
   function handleRedirect(res) {
@@ -141,6 +141,9 @@ function getlet(u) {
     url(location);
     if (isLoop()) {
       return propagateError('Redirect loop detected: ' + location);
+    }
+    if (res.headers['set-cookie']) {
+      header('cookie', res.headers['set-cookie'].map(h => h.split(';')[0]).join('; '));
     }
     init();
   }
