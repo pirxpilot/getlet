@@ -1,7 +1,7 @@
 check: lint test
 .PHONY: check
 
-LINT_SRC=index.js test
+LINT_SRC=index.js lib test
 
 include ./node_modules/make-jshint/index.mk
 
