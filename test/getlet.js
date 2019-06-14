@@ -138,6 +138,29 @@ test('should follow redirects', function (t) {
   }));
 });
 
+test('should handle cookies', function (t) {
+  nock('http://example.com')
+    .get('/simple/data')
+    .reply(301, '', {
+      location: '/more/data',
+      'set-cookie': 'token=xyz; HttpOnly; Path=/'
+    });
+  nock('http://example.com', {
+      reqHeaders: { 'cookie': 'token=xyz' }
+    })
+    .get('/more/data')
+    .reply(200, 'abc');
+
+  getlet('http://example.com/simple/data')
+    .cookies()
+    .pipe(concat({
+      encoding: 'string'
+    }, function(data) {
+      t.equal(data, 'abc');
+      t.end();
+    }));
+});
+
 test('should detect redirect loops', function (t) {
   nock('http://example.com')
     .get('/simple/data')

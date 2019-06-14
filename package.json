@@ -25,6 +25,7 @@
   "license": "MIT",
   "homepage": "https://github.com/pirxpilot/getlet",
   "dependencies": {
+    "cookiejar": "~2",
     "debug": "*"
   },
   "devDependencies": {
