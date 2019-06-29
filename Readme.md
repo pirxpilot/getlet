@@ -19,6 +19,8 @@ but it won't do any other processing. It won't buffer the responses in any way.
 ## Examples
 
 ```javascript
+  const getlet = require('getlet');
+
   // get URL and stream it
   getlet('http://google.com').pipe(stream);
 
@@ -36,14 +38,23 @@ but it won't do any other processing. It won't buffer the responses in any way.
     .send(formData)
     .pipe(stream);
 
+  // get URL and stream it, initialize later
+  const request = getlet('http://google.com', false);
+  setTimeout(function () {
+    request.pipe(stream);
+    request.init();
+  }, 1000);
+  // initialize later
+
 ```
 
 ## API
 
 
-### `getlet(url)`
+### `getlet(url, autoInit = true)`
 
 `url` is an optional parameter - alternatively you can configure target using `host` and `path`
+`autoInit` if false `init()` has to be called explicitly to trigger network request 
 
 ### `host(host)`
 
@@ -59,7 +70,7 @@ set `User-Agent` header
 
 ### `header(name, value)`
 
-set header `name` to `value`, also accepts an object treated as `name` ->` value`
+set header `name` to `value`, also accepts an object treated as `name` -> `value`
 
 ### `auth(username, password)`
 
