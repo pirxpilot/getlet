@@ -19,6 +19,46 @@ test('should request simple data', function (t) {
   }));
 });
 
+test('should work without autoinit with url', function (t) {
+  nock('http://example.com')
+    .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
+    .get('/simple/data')
+    .reply(200, 'abc');
+
+  const request = getlet('http://example.com/simple/data', false);
+
+  setTimeout(() => {
+    request.pipe(concat({
+      encoding: 'string'
+    }, function(data) {
+      t.equal(data, 'abc');
+      t.end();
+    }));
+    request.init();
+  }, 100);
+});
+
+test('should work without autoinit without url', function (t) {
+  nock('http://example.com')
+    .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
+    .get('/simple/data')
+    .reply(200, 'abc');
+
+  const request = getlet(false)
+    .host('example.com')
+    .path('/simple/data');
+
+  setTimeout(() => {
+    request.pipe(concat({
+      encoding: 'string'
+    }, function(data) {
+      t.equal(data, 'abc');
+      t.end();
+    }));
+    request.init();
+  }, 100);
+});
+
 test('should emit response event', function (t) {
   nock('http://example.com')
     .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
