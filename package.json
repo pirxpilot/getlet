@@ -32,7 +32,7 @@
     "concat-stream": "~2",
     "jshint": "~2",
     "make-jshint": "~2",
-    "nock": "~10",
+    "nock": "~12",
     "tap-dot": "^2.0.0",
     "tape": "^4.10.1"
   },
