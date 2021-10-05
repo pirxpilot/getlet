@@ -1,4 +1,11 @@
 
+2.4.1 / 2021-10-05
+==================
+
+ * upgrade tape to ~5
+ * use WHATWG URL API
+ * upgrade nock module
+
 2.4.0 / 2019-08-24
 ==================
 
