@@ -34,7 +34,7 @@
     "make-jshint": "~2",
     "nock": "~12",
     "tap-dot": "^2.0.0",
-    "tape": "^4.10.1"
+    "tape": "~5"
   },
   "files": [
     "index.js",
