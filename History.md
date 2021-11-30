@@ -1,4 +1,9 @@
 
+2.5.0 / 2021-11-30
+==================
+
+ * allow for switching off automatic redirects
+
 2.4.1 / 2021-10-05
 ==================
 
