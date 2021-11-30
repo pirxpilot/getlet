@@ -178,6 +178,22 @@ test('should follow redirects', function (t) {
   }));
 });
 
+test('should not follow redirects when switched off', function (t) {
+  nock('http://example.com')
+    .get('/simple/data')
+    .reply(301, '', {
+      location: '/more/data'
+    });
+
+    getlet('http://example.com/simple/data')
+    .followRedirects(false)
+    .on('response', res => {
+      t.equal(res.statusCode, 301);
+      t.end();
+    })
+    .on('error', t.end);
+});
+
 test('should handle cookies', function (t) {
   nock('http://example.com')
     .get('/simple/data')
