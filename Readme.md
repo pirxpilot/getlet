@@ -84,6 +84,9 @@ sends `data` with the request
 
 uses HTTP `method` (`POST`, `PUT` etc) - `GET` is used if `method` is not called
 
+### `followRedirects(boolean)`
+
+when called with `false` will prevent getlet from automatically following redirects
 
 [request]: https://github.com/mikeal/request
 [superagent]: http://visionmedia.github.io/superagent/
