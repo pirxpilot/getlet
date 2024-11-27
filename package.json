@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "concat-stream": "~2",
-    "jshint": "~2",
+    "@pirxpilot/jshint": "~3",
     "make-jshint": "~2",
     "nock": "~13"
   },
