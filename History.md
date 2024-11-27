@@ -1,4 +1,12 @@
 
+2.5.1 / 2024-11-27
+==================
+
+ * replace jshint with @pirxpilot/jshint
+ * upgrade nock to ~13
+ * replace tape with node:test
+ * replace Travis CI with github actions
+
 2.5.0 / 2021-11-30
 ==================
 
