@@ -7,5 +7,5 @@
   "unused": true,
   "laxbreak": true,
   "node": true,
-  "esversion": 6
+  "esversion": 11
 }

@@ -1,11 +1,12 @@
-const test = require('tape');
+const test = require('node:test');
+const assert = require('node:assert');
 const nock = require('nock');
 const concat = require('concat-stream');
 const { Transform } = require('stream');
 
 const getlet = require('..');
 
-test('should request simple data', function (t) {
+test('should request simple data', function (t, done) {
   nock('http://example.com')
     .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
     .get('/simple/data')
@@ -14,12 +15,12 @@ test('should request simple data', function (t) {
   getlet('http://example.com/simple/data').pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'abc');
-    t.end();
+    assert.equal(data, 'abc');
+    done();
   }));
 });
 
-test('should work without autoinit with url', function (t) {
+test('should work without autoinit with url', function (t, done) {
   nock('http://example.com')
     .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
     .get('/simple/data')
@@ -31,14 +32,14 @@ test('should work without autoinit with url', function (t) {
     request.pipe(concat({
       encoding: 'string'
     }, function(data) {
-      t.equal(data, 'abc');
-      t.end();
+      assert.equal(data, 'abc');
+      done();
     }));
     request.init();
   }, 100);
 });
 
-test('should work without autoinit without url', function (t) {
+test('should work without autoinit without url', function (t, done) {
   nock('http://example.com')
     .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
     .get('/simple/data')
@@ -52,14 +53,14 @@ test('should work without autoinit without url', function (t) {
     request.pipe(concat({
       encoding: 'string'
     }, function(data) {
-      t.equal(data, 'abc');
-      t.end();
+      assert.equal(data, 'abc');
+      done();
     }));
     request.init();
   }, 100);
 });
 
-test('should emit response event', function (t) {
+test('should emit response event', function (t, done) {
   nock('http://example.com')
     .matchHeader('accept-encoding', getlet.ACCEPT_ENCODING)
     .get('/simple/data')
@@ -67,13 +68,13 @@ test('should emit response event', function (t) {
 
   getlet('http://example.com/simple/data')
     .on('response', function(res) {
-      t.equal(res.statusCode, 200);
-      t.end();
+      assert.equal(res.statusCode, 200);
+      done();
     })
     .pipe(concat());
 });
 
-test('should post data', function (t) {
+test('should post data', function (t, done) {
   nock('http://example.com')
     .post('/simple/data', '123')
     .reply(200, 'cde');
@@ -82,12 +83,12 @@ test('should post data', function (t) {
     .method('POST')
     .send('123')
     .pipe(concat({ encoding: 'string' }, function(data) {
-      t.equal(data, 'cde');
-      t.end();
+      assert.equal(data, 'cde');
+      done();
     }));
 });
 
-test('should support host and path simple data', function (t) {
+test('should support host and path simple data', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .reply(200, 'abc');
@@ -95,12 +96,12 @@ test('should support host and path simple data', function (t) {
   getlet().host('example.com').path('/simple/data').pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'abc');
-    t.end();
+    assert.equal(data, 'abc');
+    done();
   }));
 });
 
-test('should support HTTPs', function (t) {
+test('should support HTTPs', function (t, done) {
   nock('https://example.com')
     .get('/simple/data')
     .reply(200, 'abc');
@@ -112,12 +113,12 @@ test('should support HTTPs', function (t) {
     .pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'abc');
-    t.end();
+    assert.equal(data, 'abc');
+    done();
   }));
 });
 
-test('should support custom headers', function (t) {
+test('should support custom headers', function (t, done) {
   nock('http://example.com')
     .matchHeader('authorization', '1234')
     .matchHeader('user-agent', 'Getlet Test')
@@ -130,12 +131,12 @@ test('should support custom headers', function (t) {
   .pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'abc');
-    t.end();
+    assert.equal(data, 'abc');
+    done();
   }));
 });
 
-test('should support multiple headers', function (t) {
+test('should support multiple headers', function (t, done) {
   nock('http://example.com')
     .matchHeader('authorization', '1234')
     .matchHeader('x-custom', 'custom value')
@@ -150,12 +151,12 @@ test('should support multiple headers', function (t) {
   .pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'abc');
-    t.end();
+    assert.equal(data, 'abc');
+    done();
   }));
 });
 
-test('should follow redirects', function (t) {
+test('should follow redirects', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .reply(301, '', {
@@ -173,12 +174,12 @@ test('should follow redirects', function (t) {
   .pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'abc');
-    t.end();
+    assert.equal(data, 'abc');
+    done();
   }));
 });
 
-test('should not follow redirects when switched off', function (t) {
+test('should not follow redirects when switched off', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .reply(301, '', {
@@ -188,13 +189,13 @@ test('should not follow redirects when switched off', function (t) {
     getlet('http://example.com/simple/data')
     .followRedirects(false)
     .on('response', res => {
-      t.equal(res.statusCode, 301);
-      t.end();
+      assert.equal(res.statusCode, 301);
+      done();
     })
-    .on('error', t.end);
+    .on('error', done);
 });
 
-test('should handle cookies', function (t) {
+test('should handle cookies', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .reply(301, '', {
@@ -212,12 +213,12 @@ test('should handle cookies', function (t) {
     .pipe(concat({
       encoding: 'string'
     }, function(data) {
-      t.equal(data, 'abc');
-      t.end();
+      assert.equal(data, 'abc');
+      done();
     }));
 });
 
-test('should detect redirect loops', function (t) {
+test('should detect redirect loops', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .reply(301, '', {
@@ -231,26 +232,26 @@ test('should detect redirect loops', function (t) {
 
   getlet('http://example.com/simple/data')
   .on('error', function(err) {
-    t.equal(err, 'Redirect loop detected: /more/data');
-    t.end();
+    assert.equal(err, 'Redirect loop detected: /more/data');
+    done();
   })
   .pipe(concat());
 });
 
-test('should propagate errors', function (t) {
+test('should propagate errors', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .reply(404, 'No such file');
 
   getlet('http://example.com/simple/data')
   .on('error', function(err) {
-    t.equal(err, 'HTTP Error: 404');
-    t.end();
+    assert.equal(err, 'HTTP Error: 404');
+    done();
   })
   .pipe(concat());
 });
 
-test('should unzip responses', function (t) {
+test('should unzip responses', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .replyWithFile(200, __dirname + '/fixtures/response.txt.gz', {
@@ -261,12 +262,12 @@ test('should unzip responses', function (t) {
   .pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'This is compressed response!');
-    t.end();
+    assert.equal(data, 'This is compressed response!');
+    done();
   }));
 });
 
-test('should inflate responses', function (t) {
+test('should inflate responses', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .replyWithFile(200, __dirname + '/fixtures/response.txt.flate', {
@@ -277,12 +278,12 @@ test('should inflate responses', function (t) {
   .pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'This is compressed response!');
-    t.end();
+    assert.equal(data, 'This is compressed response!');
+    done();
   }));
 });
 
-test('should decompress brotli responses', { skip: !getlet.BROTLI }, function (t) {
+test('should decompress brotli responses', { skip: !getlet.BROTLI }, function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .replyWithFile(200, __dirname + '/fixtures/response.txt.br', {
@@ -293,12 +294,12 @@ test('should decompress brotli responses', { skip: !getlet.BROTLI }, function (t
   .pipe(concat({
     encoding: 'string'
   }, function(data) {
-    t.equal(data, 'This is compressed response!');
-    t.end();
+    assert.equal(data, 'This is compressed response!');
+    done();
   }));
 });
 
-test('should ignore empty reponses with gzip encoding', function (t) {
+test('should ignore empty reponses with gzip encoding', function (t, done) {
   nock('http://example.com')
     .get('/simple/data')
     .reply(200, '', {
@@ -307,15 +308,15 @@ test('should ignore empty reponses with gzip encoding', function (t) {
 
   getlet('http://example.com/simple/data')
   .on('error', function(err) {
-    t.ok(err, 'should emit an error');
-    t.end();
+    assert.ok(err, 'should emit an error');
+    done();
   })
   .pipe(concat());
 });
 
-test('abort', function(t) {
+test('abort', async function(t) {
 
-  t.test('should close stream', function (t) {
+  await t.test('should close stream', function (t, done) {
     nock('http://example.com')
       .get('/simple/data')
       .reply(200, 'abcabcabcabc');
@@ -333,17 +334,17 @@ test('abort', function(t) {
 
     g
     .on('error', function(e) {
-      t.ok(e, 'should see abort error');
-      t.equal(e.code, 'ECONNRESET');
+      assert.ok(e, 'should see abort error');
+      assert.equal(e.code, 'ECONNRESET');
     })
     .pipe(truncate)
     .pipe(concat({ encoding: 'string'}, function(data) {
-      t.equal(data, 'abc');
-      t.end();
+      assert.equal(data, 'abc');
+      done();
     }));
   });
 
-  t.test('should not stream if already aborted', function (t) {
+  await t.test('should not stream if already aborted', function (t, done) {
     nock('http://example.com')
       .get('/simple/data')
       .reply(200, 'abcabcabcabc');
@@ -353,8 +354,8 @@ test('abort', function(t) {
 
     g
     .pipe(concat({ encoding: 'string'}, function(data) {
-      t.equal(data, '');
-      t.end();
+      assert.equal(data, '');
+      done();
     }));
   });
 

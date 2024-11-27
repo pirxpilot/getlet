@@ -32,9 +32,7 @@
     "concat-stream": "~2",
     "jshint": "~2",
     "make-jshint": "~2",
-    "nock": "~12",
-    "tap-dot": "^2.0.0",
-    "tape": "~5"
+    "nock": "~12"
   },
   "files": [
     "index.js",
