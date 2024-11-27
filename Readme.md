@@ -1,7 +1,6 @@
 [![NPM version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
+[![Build Status][build-image]][build-url]
 [![Dependency Status][deps-image]][deps-url]
-[![Development Dependency Status][dev-deps-image]][dev-deps-url]
 
 
 # getlet
@@ -91,14 +90,12 @@ when called with `false` will prevent getlet from automatically following redire
 [request]: https://github.com/mikeal/request
 [superagent]: http://visionmedia.github.io/superagent/
 
-[npm-image]: https://img.shields.io/npm/v/getlet.svg
+[npm-image]: https://img.shields.io/npm/v/getlet
 [npm-url]: https://npmjs.org/package/getlet
 
-[travis-image]: https://img.shields.io/travis/pirxpilot/getlet.svg
-[travis-url]: https://travis-ci.org/pirxpilot/getlet
+[build-image]: https://img.shields.io/github/actions/workflow/status/pirxpilot/getlet/check.yaml?branch=main
+[build-url]: https://github.com/pirxpilot/getlet/actions/workflows/check.yaml
 
-[deps-image]: https://img.shields.io/david/pirxpilot/getlet.svg
-[deps-url]: https://david-dm.org/pirxpilot/getlet
+[deps-image]: https://img.shields.io/librariesio/release/npm/getlet
+[deps-url]: https://libraries.io/npm/getlet
 
-[dev-deps-image]: https://img.shields.io/david/dev/pirxpilot/getlet.svg
-[dev-deps-url]: https://david-dm.org/pirxpilot/getlet?type=dev
