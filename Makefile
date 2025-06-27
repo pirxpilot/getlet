@@ -1,11 +1,15 @@
 check: lint test
-.PHONY: check
 
-LINT_SRC=index.js lib test
+lint:
+	./node_modules/.bin/biome ci
 
-include ./node_modules/make-jshint/index.mk
+format:
+	./node_modules/.bin/biome check --fix
 
 test:
-	node --test
+	node --test $(TEST_OPTS)
 
-.PHONY: test
+test-cov: TEST_OPTS := --experimental-test-coverage
+test-cov: test
+
+.PHONY: check format lint test test-cov

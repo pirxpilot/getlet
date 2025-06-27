@@ -29,9 +29,8 @@
     "debug": "*"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.0.5",
     "concat-stream": "~2",
-    "@pirxpilot/jshint": "~3",
-    "make-jshint": "~2",
     "nock": "~13"
   },
   "files": [
