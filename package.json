@@ -26,7 +26,7 @@
   "homepage": "https://github.com/pirxpilot/getlet",
   "dependencies": {
     "cookiejar": "~2",
-    "debug": "*"
+    "debug": "~4"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.5",
