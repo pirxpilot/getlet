@@ -1,4 +1,10 @@
 
+2.6.0 / 2026-03-26
+==================
+
+ * add timeout support
+ * limit valid range for `debug` to ~4
+
 2.5.2 / 2025-06-27
 ==================
 
