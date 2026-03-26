@@ -3,7 +3,6 @@ const assert = require('node:assert');
 const nock = require('nock');
 const concat = require('concat-stream');
 const { Transform } = require('node:stream');
-
 const getlet = require('..');
 
 test('should request simple data', (_t, done) => {
@@ -391,5 +390,32 @@ test('abort', async t => {
         done();
       })
     );
+  });
+});
+
+test('timeout', async t => {
+  await t.test('should emit error when request times out', (_t, done) => {
+    nock('http://example.com').get('/slow/data').delayConnection(500).reply(200, 'slow response');
+
+    getlet('http://example.com/slow/data')
+      .timeout(50)
+      .on('error', err => {
+        assert.equal(err.message, 'Timeout of 50ms exceeded');
+        done();
+      })
+      .pipe(concat());
+  });
+
+  await t.test('should not timeout when response is fast enough', (_t, done) => {
+    nock('http://example.com').get('/fast/data').reply(200, 'fast');
+
+    getlet('http://example.com/fast/data')
+      .timeout(5000)
+      .pipe(
+        concat({ encoding: 'string' }, data => {
+          assert.equal(data, 'fast');
+          done();
+        })
+      );
   });
 });

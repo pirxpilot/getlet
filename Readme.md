@@ -87,6 +87,10 @@ uses HTTP `method` (`POST`, `PUT` etc) - `GET` is used if `method` is not called
 
 when called with `false` will prevent getlet from automatically following redirects
 
+### `timeout(ms)`
+
+sets a timeout in milliseconds for the request - if the response is not received within the specified time, the request is aborted and an `error` event is emitted
+
 [request]: https://github.com/mikeal/request
 [superagent]: http://visionmedia.github.io/superagent/
 
