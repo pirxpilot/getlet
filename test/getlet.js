@@ -1,9 +1,9 @@
-const test = require('node:test');
-const assert = require('node:assert');
-const nock = require('nock');
-const concat = require('concat-stream');
-const { Transform } = require('node:stream');
-const getlet = require('..');
+import assert from 'node:assert';
+import { Transform } from 'node:stream';
+import test from 'node:test';
+import concat from 'concat-stream';
+import nock from 'nock';
+import getlet from '../lib/getlet.js';
 
 test('should request simple data', (_t, done) => {
   nock('http://example.com')
@@ -284,9 +284,11 @@ test('should propagate errors', (_t, done) => {
 });
 
 test('should unzip responses', (_t, done) => {
-  nock('http://example.com').get('/simple/data').replyWithFile(200, `${__dirname}/fixtures/response.txt.gz`, {
-    'content-encoding': 'gzip'
-  });
+  nock('http://example.com')
+    .get('/simple/data')
+    .replyWithFile(200, `${import.meta.dirname}/fixtures/response.txt.gz`, {
+      'content-encoding': 'gzip'
+    });
 
   getlet('http://example.com/simple/data').pipe(
     concat(
@@ -302,9 +304,11 @@ test('should unzip responses', (_t, done) => {
 });
 
 test('should inflate responses', (_t, done) => {
-  nock('http://example.com').get('/simple/data').replyWithFile(200, `${__dirname}/fixtures/response.txt.flate`, {
-    'content-encoding': 'deflate'
-  });
+  nock('http://example.com')
+    .get('/simple/data')
+    .replyWithFile(200, `${import.meta.dirname}/fixtures/response.txt.flate`, {
+      'content-encoding': 'deflate'
+    });
 
   getlet('http://example.com/simple/data').pipe(
     concat(
@@ -320,9 +324,11 @@ test('should inflate responses', (_t, done) => {
 });
 
 test('should decompress brotli responses', { skip: !getlet.BROTLI }, (_t, done) => {
-  nock('http://example.com').get('/simple/data').replyWithFile(200, `${__dirname}/fixtures/response.txt.br`, {
-    'content-encoding': 'br'
-  });
+  nock('http://example.com')
+    .get('/simple/data')
+    .replyWithFile(200, `${import.meta.dirname}/fixtures/response.txt.br`, {
+      'content-encoding': 'br'
+    });
 
   getlet('http://example.com/simple/data').pipe(
     concat(

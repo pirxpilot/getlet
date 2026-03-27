@@ -2,10 +2,8 @@
   "name": "getlet",
   "version": "2.6.0",
   "description": "HTTP(s) get request with redirect, compress and streaming",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "type": "module",
+  "exports": "./lib/getlet.js",
   "scripts": {
     "test": "make check"
   },
@@ -34,7 +32,6 @@
     "nock": "~14"
   },
   "files": [
-    "index.js",
     "lib"
   ]
 }
