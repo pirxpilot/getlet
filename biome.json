@@ -34,11 +34,17 @@
   },
   "linter": {
     "enabled": true,
+    "domains": {
+      "project": "recommended"
+    },
     "rules": {
       "recommended": true,
       "correctness": {
+        "noUndeclaredDependencies": "error",
         "noUndeclaredVariables": "error",
-        "noUnusedVariables": "error"
+        "noUnusedVariables": "error",
+        "useImportExtensions": "error",
+        "useJsonImportAttributes": "error"
       },
       "complexity": {
         "noForEach": "off"
