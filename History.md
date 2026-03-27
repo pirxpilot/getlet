@@ -1,4 +1,11 @@
 
+3.0.0 / 2026-03-27
+==================
+
+ * transition to ESM format
+ * upgrade `biome` to 2.4.9
+ * upgrade nock to ~14
+
 2.6.0 / 2026-03-26
 ==================
 
